@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="container">
+    <h4 class="mt-2">&#10149; Home </h4>
+    <hr>
+    <form method="post" action="{{ url_for('processImage') }}" enctype="multipart/form-data">
+        <div class="text-center">
+            <h5>Set the image to analyze</h5>
+        </div>
+        <fieldset>
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">Import the image from: </label>
+                <select name="selection_mode" class="custom-select my-1 ml-3 mr-sm-3" id="select_elmt" onchange="setInputImageForm(event)">
+                    <option value="1">URL</option>
+                    <option value="2">Local storage</option>
+                    <option value="3">Camera</option>
+                </select>
+            </div>
+
+            <input type="url" name="image_url" id="img_url" class="form-control mt-2" placeholder="image url" onchange="setImageFromURL(event)">
+
+            <div class="form-group mb-3 mt-3" style="display:none" id="img_file_block">
+                <input type="file" name="img_file" class="form-control-file" id="img_file" accept="image/*" onchange="setImageFromFile(event)">
+            </div>
+
+            <hr>
+            <div class="text-center" style="display: none;" id="img_block">
+                <img src="" class="img-fluid" id="img" alt="image">
+            </div>
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary">Analyze the image</button>
+            </div>
+
+        </fieldset>
+    </form>
+</div>
+
+<script>
+    function show_input_elt(id){
+        var elts = [document.getElementById('img_url'), document.getElementById('img_file_block')];
+
+        for(var i in elts){
+            elt = elts[i];
+            if(i == id-1){
+                elt.style.display = 'block';
+            }else{
+                elt.style.display= 'none';
+            }
+        }
+
+        var img_block = document.getElementById('img_block');
+        img_block.style.display="none";
+    }
+
+    function setInputImageForm(e){
+        var value = e.target.value;
+
+        show_input_elt(parseInt(value));
+    }
+
+    function setImgSrc(url){
+        var img_elt = document.getElementById('img');
+        img.src = url;
+
+        var img_block = document.getElementById('img_block');
+        img_block.style.display="block";
+    }
+
+    function setImageFromURL(e){
+        var url = e.target.value;
+        setImgSrc(url);
+    }   
+
+    function setImageFromFile(e){
+        const file = e.target.files[0];
+
+        let reader = new FileReader();
+        reader.onload = () => {
+            setImgSrc(reader.result);
+        }
+        reader.readAsDataURL(file);
+    }
+
+</script>
+
+{% endblock %}
+
+
+
