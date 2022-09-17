@@ -3,6 +3,7 @@ import os.path
 from werkzeug.utils import secure_filename
 from imageai.Detection import ObjectDetection
 import os
+import requests
 
 app = Flask(__name__)
 
@@ -11,6 +12,11 @@ detector = None
 
 @app.before_first_request
 def load_the_model():
+    #download the model file
+    model_URL = "https://github.com/OlafenwaMoses/ImageAI/releases/download/essentials-v5/resnet50_coco_best_v2.1.0.h5"
+    response = requests.get(URL)
+    open("./static/model/resnet50_coco_best_v2.1.0.h5", "wb").write(response.content)
+    
     os.chdir('./static/model')
     execution_path = os.getcwd()
 
