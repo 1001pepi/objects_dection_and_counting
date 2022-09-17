@@ -14,7 +14,7 @@ detector = None
 def load_the_model():
     #download the model file
     model_URL = "https://github.com/OlafenwaMoses/ImageAI/releases/download/essentials-v5/resnet50_coco_best_v2.1.0.h5"
-    response = requests.get(URL)
+    response = requests.get(model_URL)
     open("./static/model/resnet50_coco_best_v2.1.0.h5", "wb").write(response.content)
     
     os.chdir('./static/model')
