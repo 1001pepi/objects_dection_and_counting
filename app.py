@@ -15,9 +15,9 @@ def load_the_model():
     #download the model file
     model_URL = "https://github.com/OlafenwaMoses/ImageAI/releases/download/essentials-v5/resnet50_coco_best_v2.1.0.h5"
     response = requests.get(model_URL)
-    open("resnet50_coco_best_v2.1.0.h5", "wb").write(response.content)
+    open("./static/resnet50_coco_best_v2.1.0.h5", "wb").write(response.content)
     
-    os.chdir('./static/model')
+    os.chdir('./static')
     execution_path = os.getcwd()
 
     global detector
@@ -37,10 +37,10 @@ def processImage():
         if selection_mode == "2":#file
             
             f = request.files['img_file']
-            f.save('./static/images/' + secure_filename(f.filename))
+            f.save('./static/' + secure_filename(f.filename))
             
             #call the model to make predictions
-            os.chdir('./static/images')
+            os.chdir('./static')
             images_path = os.getcwd()
             global detector
             detections = detector.detectObjectsFromImage(input_image=os.path.join(images_path, f.filename), output_image_path=os.path.join(images_path, "imagenew.jpg"))
