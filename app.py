@@ -3,7 +3,7 @@ import os.path
 from werkzeug.utils import secure_filename
 from imageai.Detection import ObjectDetection
 import os
-import requests
+import requests 
 
 app = Flask(__name__)
 
