@@ -28,8 +28,14 @@
             <div class="text-center" style="display: none;" id="img_block">
                 <img src="" class="img-fluid" id="img" alt="image">
             </div>
-            <div class="text-center mt-3">
+            <div class="text-center mt-3" onclick="handleSubmitButton(event)">
                 <button type="submit" class="btn btn-primary">Analyze the image</button>
+            </div>
+            <div class="text-center mt-3" id="processing_button" style="display:none;">
+              <button class="btn btn-primary" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Processing image...
+              </button>
             </div>
 
         </fieldset>
@@ -37,6 +43,14 @@
 </div>
 
 <script>
+  function handleSubmitButton(e){
+    e.target.style.display = 'none'
+
+    var processing_button = document.getElementById('processing_button')
+
+    processing_button.style.display = 'block';
+  }
+
     function show_input_elt(id){
         var elts = [document.getElementById('img_url'), document.getElementById('img_file_block')];
 

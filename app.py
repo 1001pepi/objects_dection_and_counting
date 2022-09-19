@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 import os.path
 from werkzeug.utils import secure_filename
 from imageai.Detection import ObjectDetection
@@ -9,6 +9,9 @@ app = Flask(__name__)
 
 #global variables
 detector = None
+input_img_src = None
+output_img_src = None
+recap = {}
 
 @app.before_first_request
 def load_the_model():
@@ -32,20 +35,44 @@ def home():
 
 @app.route('/processImage', methods=['GET', 'POST'])
 def processImage():
-    if request.method == 'POST':
-        selection_mode = request.form['selection_mode']
-        if selection_mode == "2":#file
-            
-            f = request.files['img_file']
-            f.save('./static/' + secure_filename(f.filename))
-            
-            #call the model to make predictions
-            os.chdir('./static')
-            images_path = os.getcwd()
-            global detector
-            detections = detector.detectObjectsFromImage(input_image=os.path.join(images_path, f.filename), output_image_path=os.path.join(images_path, "imagenew.jpg"))
+  def processImageHelper(filename):
+    #call the model to make predictions
+    images_path = os.getcwd()
+    global detector
+    global recap
+    detections = detector.detectObjectsFromImage(input_image=os.path.join(images_path, filename), output_image_path=os.path.join(images_path, "imagenew.jpg"))
 
-            for eachObject in detections:
-                print(eachObject["name"] , " : " , eachObject["percentage_probability"] )
-            
-        return render_template('home.html')
+    for eachObject in detections:
+      name = eachObject["name"]
+      probability = eachObject["percentage_probability"]
+      if(probability >= 50):
+        recap[name] = recap.get(name, 0) + 1
+
+    global input_img_src
+    global output_img_src
+    input_img_src = url_for('static', filename=filename)
+    output_img_src = url_for('static', filename="imagenew.jpg")
+
+  if request.method == 'POST':
+    filename = None
+    selection_mode = request.form['selection_mode']
+    if selection_mode == "1":#URL
+      img_URL = request.form['image_url']
+      response = requests.get(img_URL)
+      open('./image.jpg', 'wb').write(response.content)
+      filename = 'image.jpg'
+
+    if selection_mode == "2":#file
+      f = request.files['img_file']
+      f.save('./static/' + secure_filename(f.filename))
+      filename = f.filename
+        
+    processImageHelper(filename)
+      
+  return redirect(url_for('result'))
+
+@app.route('/result')
+def result():
+  global input_img_src
+  global output_img_src
+  return render_template('result.html', input_img_src=input_img_src, output_img_src=output_img_src, recap=recap)
