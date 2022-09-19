@@ -18,15 +18,15 @@
       <h5>Recap</h5>
     </div>
     <div class="text-center">
-      <table>
+      <table style="margin-left: auto;margin-right: auto;">
         <tr>
           <th> Object </th>
           <th> Number </th>
         </tr>
         {% for object in recap %}
           <tr>
-            <td> {{ object.key }} </td>
-            <td> {{ object.value }} </td>
+            <td> {{ object }} </td>
+            <td> {{ recap[object] }} </td>
           </tr>
         {% endfor %}
       <table>

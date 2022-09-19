@@ -35,13 +35,14 @@ def home():
 
 @app.route('/processImage', methods=['GET', 'POST'])
 def processImage():
-  def processImageHelper(filename):
+  def processImageHelper():
     #call the model to make predictions
     images_path = os.getcwd()
     global detector
     global recap
-    detections = detector.detectObjectsFromImage(input_image=os.path.join(images_path, filename), output_image_path=os.path.join(images_path, "imagenew.jpg"))
+    detections = detector.detectObjectsFromImage(input_image=os.path.join(images_path, 'image.jpg'), output_image_path=os.path.join(images_path, "imagenew.jpg"))
 
+    recap = {}
     for eachObject in detections:
       name = eachObject["name"]
       probability = eachObject["percentage_probability"]
@@ -50,7 +51,7 @@ def processImage():
 
     global input_img_src
     global output_img_src
-    input_img_src = url_for('static', filename=filename)
+    input_img_src = url_for('static', filename='image.jpg')
     output_img_src = url_for('static', filename="imagenew.jpg")
 
   if request.method == 'POST':
@@ -64,10 +65,10 @@ def processImage():
 
     if selection_mode == "2":#file
       f = request.files['img_file']
-      f.save('./static/' + secure_filename(f.filename))
+      f.save('./image.jpg')
       filename = f.filename
         
-    processImageHelper(filename)
+    processImageHelper()
       
   return redirect(url_for('result'))
 
