@@ -20,7 +20,6 @@ zipp==3.8.1
 tensorflow==2.8.0rc0
 keras==2.4.3 
 mccabe==0.6.1
-numpy==1.19.3 
 pillow==7.0.0 
 scipy==1.4.1 
 h5py==2.10.0 
