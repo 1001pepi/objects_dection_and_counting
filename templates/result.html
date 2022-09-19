@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="container">
+    <h4 class="mt-2">&#10149; Result</h4>
+    <hr>
+    <div class="text-center">
+      <h5>Input</h5>
+      <img src="{{ input_img_src }}" class="img-fluid" alt="input image">
+    </div>
+    <hr>
+    <div class="text-center">
+      <h5>Output</h5>
+      <img src="{{ output_img_src }}" class="img-fluid" alt="output image">
+    </div>
+    <hr>
+    <div class="text-center">
+      <h5>Recap</h5>
+    </div>
+    <div class="text-center">
+      <table style="margin-left: auto;margin-right: auto;">
+        <tr>
+          <th> Object </th>
+          <th> Number </th>
+        </tr>
+        {% for object in recap %}
+          <tr>
+            <td> {{ object }} </td>
+            <td> {{ recap[object] }} </td>
+          </tr>
+        {% endfor %}
+      <table>
+    </div>
+</div>
+
+<script>
+    function setInputImageForm(e){
+        var value = e.target.value;
+
+        show_input_elt(parseInt(value));
+    }
+
+    function setImgSrc(url){
+        var img_elt = document.getElementById('img');
+        img.src = url;
+
+        var img_block = document.getElementById('img_block');
+        img_block.style.display="block";
+    }
+
+    function setImageFromURL(e){
+        var url = e.target.value;
+        setImgSrc(url);
+    }   
+
+    function setImageFromFile(e){
+        const file = e.target.files[0];
+
+        let reader = new FileReader();
+        reader.onload = () => {
+            setImgSrc(reader.result);
+        }
+        reader.readAsDataURL(file);
+    }
+
+</script>
+
+{% endblock %}
+
+
+
