@@ -37,10 +37,10 @@ def processImage():
         if selection_mode == "2":#file
             
             f = request.files['img_file']
-            f.save('./static/' + secure_filename(f.filename))
+            f.save('./static/images/' + secure_filename(f.filename))
             
             #call the model to make predictions
-            os.chdir('./static')
+            os.chdir('./static/images')
             images_path = os.getcwd()
             global detector
             detections = detector.detectObjectsFromImage(input_image=os.path.join(images_path, f.filename), output_image_path=os.path.join(images_path, "imagenew.jpg"))
